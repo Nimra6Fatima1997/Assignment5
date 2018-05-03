@@ -4,56 +4,53 @@ size = input("Enter a number of processors : ")  # take number of processors fro
 
 if size != 0:         # if number of processors is  not zero then  do work else print message
     i = 0
-    start_time = 0
-    final_time = 0
     waiting_time = 0
     average_waiting_time = 0.0
     average_turnaround_time = 0.0
     total_waiting_time = 0
     total_turnaround_time = 0
-    arrival_time = [0]*size     # declare the arrival_time array
-    burst_time = [0]*size       # declare the burst_time array
-    process_name = [0]*size     # declare the process_name array
+
+    arrival_time = 0     # declare the arrival_time array
+    burst_time = 0       # declare the burst_time array
+    process_name = 0    # declare the process_name array
+
     Turnaround_time = [0]*size  # declare the turnaround_time array
     waiting_time = [0]*size     # declare the waiting_time array
 
+    list =[0]*size
     while i < size:
-        process_name[i] = i
+        dict = {}
+        list[i]=dict
         print "process ", i
-        arrival_time[i] = input("Enter arrival time : ")
-        burst_time[i] = input("Enter burst time : ")
+        arrival_time = input("Enter arrival time : ")
+        list[i]['Arrival_time '] = arrival_time
+        burst_time = input("Enter burst time : ")
+        list[i]['Burst_time '] = burst_time
+        process_name = i
+        list[i]['Process '] = process_name
+
         i=i+1
-
     for a in range(size-1):                # sorted the processors with respect to arrival_time
-        if arrival_time[a] > arrival_time[a+1]:
-            temp = arrival_time[a]
-            temp2 = process_name[a]
-            temp1 = burst_time[a]
-            burst_time[a] = burst_time[a + 1]
-            arrival_time[a] = arrival_time[a+1]
-            process_name[a] = process_name[a + 1]
-            burst_time[a + 1] = temp1
-            arrival_time[a+1] = temp
-            process_name[a + 1] = temp2
-
+        if list[a]['Arrival_time '] > list[a+1]['Arrival_time ']:
+            temp=list[a]
+            list[a]=list[a+1]
+            list[a+1]=temp
     print "processor  ", "Burst_time  ", "Arrival_time  ", "Waiting_time  ", "Turnaround_time  "
 
+    waiting_time[0]=0
+    Turnaround_time[0]=list[0]['Burst_time ']
     for a in range(size):
         if a != 0:
-            waiting_time[a] = start_time - arrival_time[a]
-
-        for b in range(burst_time[a]):
-            final_time = final_time + 1
-            start_time = start_time + 1
-        Turnaround_time[a] = final_time - arrival_time[a]
-        print process_name[a], "\t\t\t\t", burst_time[a], "\t\t\t\t", arrival_time[a], "\t\t\t\t",waiting_time[a], "\t\t\t\t",  Turnaround_time[a]
+            waiting_time[a] = waiting_time[a-1]+list[a-1]['Burst_time ']-list[a]['Arrival_time ']
+            Turnaround_time[a] = waiting_time[a]+list[a]['Burst_time ']-list[a]['Arrival_time ']
+        print list[a]['Process '],"\t\t\t\t", list[a]['Burst_time '] , "\t\t\t\t",list[a]['Arrival_time '] , "\t\t\t\t", waiting_time[a], "\t\t\t\t", Turnaround_time[a]
 
     for a in range(size):
-        total_turnaround_time = Turnaround_time[a] + total_turnaround_time       # total turnaround_time
-        total_waiting_time = waiting_time[a] + total_waiting_time                # total witing_time
+        total_turnaround_time = Turnaround_time[a] + total_turnaround_time  # total turnaround_time
+        total_waiting_time = waiting_time[a] + total_waiting_time  # total witing_time
 
-    average_turnaround_time = total_turnaround_time/size            # average turnaround_time
-    average_waiting_time = total_waiting_time/size                  # average waiting_time
+    average_turnaround_time = total_turnaround_time / size  # average turnaround_time
+    average_waiting_time = total_waiting_time / size  # average waiting_time
 
     print "Average Waiting_time = ", average_waiting_time
     print "Average Turnaroud_time = ", average_turnaround_time
