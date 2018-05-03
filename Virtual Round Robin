@@ -1,0 +1,170 @@
+size = input("Enter a number of processors (MAX:5) : ")  # take number of processors from user
+
+if size != 0:         # if number of processors is  not zero then  do work else print message
+    if size < 6:
+        i = 0
+        wait_front = 0
+        wait_rear = 0
+        ready_front = 0
+        ready_rear = 0
+        auxiliary_front = 0
+        auxiliary_rear=0
+        burst = 0
+        flag = "false"
+        running_processor = 0
+        running_process_name=0
+        Quantum_time = 0
+        average_waiting_time = 0.0
+        average_turnaround_time = 0.0
+        total_waiting_time = 0
+        total_turnaround_time = 0
+        time = 0
+        ready_queue = [0]*100
+        ready_queue_process_name=[0]*100
+        waiting_queue = [0]*100
+        waiting_queue_process_name = [0] * 100
+
+        auxiliary_queue = [0]*100
+        auxiliary_queue_process_name = [0] * 100
+        waiting_queue_arrival_time = [0]*100
+        arrival_time = [0]*size     # declare the arrival_time array
+        burst_time = [0]*size       # declare the burst_time array
+        burst_temp_array = [0]*size
+        process_name = [0]*size     # declare the process_name array
+        Turnaround_time = [0]*size  # declare the turnaround_time array
+        waiting_time = [0]*size     # declare the waiting_time array
+
+        for a in range(size):        # take arrival and burst time from user
+
+            process_name[i] = i
+            print "process ", i
+
+            arrival_time[i] = input("Enter arrival time : ")
+            burst_time[i] = input("Enter burst time : ")
+            burst_temp_array[i] = burst_time[i]
+            i = i+1
+        Quantum_time = input("Enter Quantum_time : ")
+        for a in range(size - 1):  # sorted the processors with respect to arrival_time
+            if arrival_time[a] > arrival_time[a + 1]:
+                temp = arrival_time[a]
+                temp2 = process_name[a]
+                temp1 = burst_time[a]
+                burst_time[a] = burst_time[a + 1]
+                arrival_time[a] = arrival_time[a + 1]
+                process_name[a] = process_name[a + 1]
+                burst_time[a + 1] = temp1
+                arrival_time[a + 1] = temp
+                process_name[a + 1] = temp2
+
+        ready_queue[ready_rear] = burst_time[burst]
+        ready_queue_process_name[ready_rear]=process_name[burst]         # first put one processor in ready queue
+        ready_front=ready_rear
+        ready_rear = ready_rear + 1
+
+        while ready_rear!=ready_front:     # while ready queue is not empty
+            if flag=="true":
+                running_processor = auxiliary_queue[auxiliary_front]
+                running_process_name = auxiliary_queue_process_name[auxiliary_front]
+                auxiliary_front = auxiliary_front + 1
+                flag="false"
+            else:
+                running_processor=ready_queue[ready_front]
+                running_process_name = ready_queue_process_name[ready_front]
+                ready_front=ready_front+1
+            if running_process_name/2!=0:        #if process is not even
+
+                if running_processor >Quantum_time:      # if burst time is greater then Quantum time
+                    running_processor=running_processor-Quantum_time
+
+                    for time in range(time+Quantum_time):
+                        time=time+1
+                        burst = burst + 1
+                        if burst < size:
+                            if arrival_time[burst]==time:         # first check the new process
+                                ready_queue[ready_rear] = burst_time[burst]
+                                ready_queue_process_name[ready_rear] = process_name[burst]
+                                ready_rear = ready_rear + 1
+
+                        if waiting_queue_arrival_time[wait_rear]==time:      # load processor from waiting queue to auxiliary queue
+                            auxiliary_queue[auxiliary_rear] = waiting_queue[wait_rear]
+                            auxiliary_queue_process_name[auxiliary_rear]=waiting_queue_process_name[wait_rear]
+                            wait_rear = wait_rear + 1
+                            auxiliary_rear= auxiliary_rear+ 1
+                            flag = "true"
+
+                    ready_queue[ready_rear] = running_processor                 # then load the process from running queue to ready queue
+                    ready_queue_process_name[ready_rear]=running_process_name
+                    print  "[", running_process_name, "]", running_processor
+                    ready_rear = ready_rear + 1
+                else:
+                    if running_processor < Quantum_time:          # if burst time is less then quantum time
+                        if running_processor > 0:
+                            running_processor = running_processor - running_processor
+                            # total=total+Quantum_time
+                            for time in range(time + running_processor):
+                                time = time + 1
+                                burst = burst + 1
+                                if burst < size:
+                                    if arrival_time[burst] == time:  # first check the new process
+                                        ready_queue[ready_rear] = burst_time[burst]
+                                        ready_queue_process_name[ready_rear] = process_name[burst]
+                                        ready_rear = ready_rear + 1
+
+                                    if waiting_queue_arrival_time[wait_rear] == time:  # load processor from waiting queue to auxiliary queue
+                                        auxiliary_queue[auxiliary_rear] = waiting_queue[wait_rear]
+                                        auxiliary_queue_process_name[auxiliary_rear] = waiting_queue_process_name[wait_rear]
+                                        wait_rear = wait_rear + 1
+                                        auxiliary_rear = auxiliary_rear + 1
+                                        flag = "true"
+                            print "[", running_process_name, "]", running_processor
+            else:          # if process is even
+
+                if running_processor < 2:             #if burst time is less then i/o time
+                    running_processor = running_processor - running_processor
+                    for time in range(time + running_processor):
+                        time = time + 1
+                        burst = burst + 1
+                        if burst < size:
+                            if arrival_time[burst] == time:        # first check the new process
+                                 ready_queue[ready_rear] = burst_time[burst]
+                                 ready_queue_process_name[ready_rear] = process_name[burst]
+                                 ready_rear = ready_rear + 1
+
+                            if waiting_queue_arrival_time[wait_rear] == time:  # load processor from waiting queue to auxiliary queue
+                                auxiliary_queue[auxiliary_rear] = waiting_queue[wait_rear]
+                                auxiliary_queue_process_name[auxiliary_rear] = waiting_queue_process_name[wait_rear]
+                                wait_rear = wait_rear + 1
+                                auxiliary_rear = auxiliary_rear + 1
+                                flag = "true"
+
+                        print  "[", running_process_name, "]", running_processor
+                else:
+                    running_processor = running_processor - 2       # if burst time is greater then i/o time
+                    for time in range(time + 2):
+                        time = time + 1
+                        burst = burst + 1
+                        if burst < size:
+                            if arrival_time[burst] == time:  # first check the new process
+                                ready_queue[ready_rear] = burst_time[burst]
+                                ready_queue_process_name[ready_rear] = process_name[burst]
+                                ready_rear = ready_rear + 1
+
+                            if waiting_queue_arrival_time[wait_rear] == time:  # load processor from waiting queue to auxiliary queue
+                                auxiliary_queue[auxiliary_rear] = waiting_queue[wait_rear]
+                                auxiliary_queue_process_name[auxiliary_rear] = waiting_queue_process_name[wait_rear]
+                                wait_rear = wait_rear + 1
+                                auxiliary_rear = auxiliary_rear + 1
+                                flag = "true"
+
+                    ready_queue[ready_rear] = running_processor
+                    ready_queue_process_name[ready_rear] = running_process_name
+                    print  "[", running_process_name, "]", running_processor
+                    ready_rear = ready_rear + 1
+                    wait_front = wait_front + 1
+                    waiting_queue_arrival_time = time + 5
+                    waiting_queue[wait_front] = running_processor
+                    waiting_queue_process_name[wait_front] = running_process_name
+
+
+else:
+    print "sorry !.. you have not select any process "
