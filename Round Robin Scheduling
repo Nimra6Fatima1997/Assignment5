@@ -27,7 +27,7 @@ if size != 0:         # if number of processors is  not zero then  do work else 
         process_name = [0]*size     # declare the process_name array
         Turnaround_time = [0]*size  # declare the turnaround_time array
         waiting_time = [0]*size     # declare the waiting_time array
-
+        waiting_time[0] = 0
         for a in range(size):        # take arrival and burst time from user
 
             process_name[i] = i
@@ -87,7 +87,7 @@ if size != 0:         # if number of processors is  not zero then  do work else 
                     if running_processor < Quantum_time:          # if burst time is less then quantum time
                         if running_processor > 0:
                             running_processor = running_processor - running_processor
-                            # total=total+Quantum_time
+                            waiting_time[running_process_name] =time-arrival_time[running_process_name]
                             for time in range(time + running_processor):
                                 time = time + 1
                                 burst = burst + 1
@@ -103,6 +103,8 @@ if size != 0:         # if number of processors is  not zero then  do work else 
                                         wait_rear = wait_rear + 1
                                         ready_rear = ready_rear + 1
                             print "[", running_process_name, "]", running_processor
+                            Turnaround_time[running_process_name] = time - arrival_time[running_process_name]
+                            
             else:          # if process is even
 
                 if running_processor < 2:             #if burst time is less then i/o time
@@ -122,8 +124,11 @@ if size != 0:         # if number of processors is  not zero then  do work else 
                                 wait_rear = wait_rear + 1
                                 ready_rear = ready_rear + 1
                         print  "[", running_process_name, "]", running_processor
+                    Turnaround_time[running_process_name] = time-arrival_time[running_process_name]
+
                 else:
                     running_processor = running_processor - 2       # if burst time is greater then i/o time
+                    waiting_time[running_process_name] = time - arrival_time[running_process_name]
                     for time in range(time + 2):
                         time = time + 1
                         burst = burst + 1
@@ -147,6 +152,13 @@ if size != 0:         # if number of processors is  not zero then  do work else 
                     waiting_queue_arrival_time = time + 5
                     waiting_queue[wait_front] = running_processor
                     waiting_queue_process_name[wait_front] = running_process_name
+        for a in range (size-1):
+            total_turnaround_time=total_turnaround_time+Turnaround_time[a]
+            total_waiting_time=total_waiting_time+waiting_time[a]
+        average_waiting_time=total_waiting_time/size
+        average_turnaround_time=total_turnaround_time/size
+        print "Average Turnaround time : ", average_turnaround_time
+        print "Average Waiting time : ", average_waiting_time
 
 
 else:
