@@ -1,5 +1,7 @@
-size = input("Enter a number of processors : ")  # take number of processors from user
+size = input("Enter a number of processors : ")               # take number of processors from user
 if size!=0:
+    i = 0
+    list = [0] * size
     burst_time = 0
     priority =0
     waiting_time = [0]*size
@@ -8,9 +10,9 @@ if size!=0:
     average_turnaround_time = 0.0
     total_waiting_time = 0
     total_turnaround_time = 0
-    process_name = [0]*size     # declare the process_name array
-    i=0
-    list = [0] * size
+    process_name = [0]*size                        # declare the process_name array
+ 
+    
     while i < size:
         dict = {}
         list[i] = dict
@@ -25,27 +27,30 @@ if size!=0:
         i = i + 1
     print "processor  ", "Burst_time  ", "Priority  ", "Waiting_time  ", "Turnaround_time  "
 
-    for a in range(size-1):  # sorted the processors with respect to priority
+    for a in range(size-1):                                         # sorted the processors with respect to priority
         if list[a]['priority '] > list[a + 1]['priority ']:
             temp = list[a]
             list[a] = list[a + 1]
             list[a + 1] = temp
+            
     waiting_time[0]=0
     turnaround_time[0]=list[0]['Burst_time ']
     i=0
     i=i+1
+    
     for a in range(size):
         if a!=0:
-            waiting_time[a]=waiting_time[a-1]+list[a]['Burst_time ']
+            waiting_time[a]=waiting_time[a-1]+list[a-1]['Burst_time ']
             turnaround_time[a]=turnaround_time[a-1]+list[a]['Burst_time ']
+            
         print list[a]['Process '], "\t\t\t\t", list[a]['Burst_time '], "\t\t\t\t", list[a]['priority '], "\t\t\t\t", waiting_time[a], "\t\t\t\t", turnaround_time[a]
 
     for a in range(size):
-        total_turnaround_time = turnaround_time[a] + total_turnaround_time  # total turnaround_time
-        total_waiting_time = waiting_time[a] + total_waiting_time  # total witing_time
+        total_turnaround_time += turnaround_time[a]                            # total turnaround_time
+        total_waiting_time += waiting_time[a]                                   # total witing_time
 
-    average_turnaround_time = total_turnaround_time / size  # average turnaround_time
-    average_waiting_time = total_waiting_time / size  # average waiting_time
+    average_turnaround_time = total_turnaround_time / size                                            # average turnaround_time
+    average_waiting_time = total_waiting_time / size                                                  # average waiting_time
 
     print "Average Waiting_time = ", average_waiting_time
     print "Average Turnaroud_time = ", average_turnaround_time
