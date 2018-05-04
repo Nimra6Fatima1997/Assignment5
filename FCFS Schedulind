@@ -1,56 +1,58 @@
 # FCFS scheduling
 
-size = input("Enter a number of processors : ")                        # take number of processors from user
+size = input("Enter a number of processors : ")                             # take number of processors from user
 
-if size != 0:                                             # if number of processors is  not zero then  do work else print message
+if size != 0:                                                             # if number of processors is  not zero then  do work else print message
     i = 0
     waiting_time = 0
     average_waiting_time = 0.0
     average_turnaround_time = 0.0
     total_waiting_time = 0
     total_turnaround_time = 0
- 
-    arrival_time = 0                                # declare the arrival_time array
-    burst_time = 0                                  # declare the burst_time array
-    process_name = 0                                # declare the process_name array
 
-    Turnaround_time = [0]*size                        # declare the turnaround_time array
-    waiting_time = [0]*size                            # declare the waiting_time array
+    arrival_time = 0                                                                       # declare the arrival_time array
+    burst_time = 0                                                                        # declare the burst_time array
+    process_name = 0                                                                      # declare the process_name array
 
-    list =[0]*size
+    Turnaround_time = [0] * size                                                          # declare the turnaround_time array
+    waiting_time = [0] * size                                                             # declare the waiting_time array
+
+    fcfs = [0] * size
     while i < size:
         dict = {}
-        list[i]=dict
+        fcfs[i] = dict
         print "process ", i
         arrival_time = input("Enter arrival time : ")
-        list[i]['Arrival_time '] = arrival_time
+        fcfs[i]['Arrival_time '] = arrival_time
         burst_time = input("Enter burst time : ")
-        list[i]['Burst_time '] = burst_time
+        fcfs[i]['Burst_time '] = burst_time
         process_name = i
-        list[i]['Process '] = process_name
+        fcfs[i]['Process '] = process_name
 
-        i=i+1
-    for a in range(size-1):                                  # sorted the processors with respect to arrival_time
-        if list[a]['Arrival_time '] > list[a+1]['Arrival_time ']:
-            temp=list[a]
-            list[a]=list[a+1]
-            list[a+1]=temp
+        i = i + 1
+    for loop1 in range(size - 1):                                                # sorted the processors with respect to arrival_time
+        if fcfs[loop1]['Arrival_time '] > fcfs[loop1 + 1]['Arrival_time ']:
+            temp = fcfs[loop1]
+            fcfs[loop1] = fcfs[loop1 + 1]
+            fcfs[loop1 + 1] = temp
     print "processor  ", "Burst_time  ", "Arrival_time  ", "Waiting_time  ", "Turnaround_time  "
 
-    waiting_time[0]=0
-    Turnaround_time[0]=list[0]['Burst_time ']
-    for a in range(size):
-        if a != 0:
-            waiting_time[a] = waiting_time[a-1]+list[a-1]['Burst_time ']-list[a]['Arrival_time ']
-            Turnaround_time[a] = waiting_time[a]+list[a]['Burst_time ']-list[a]['Arrival_time ']
-        print list[a]['Process '],"\t\t\t\t", list[a]['Burst_time '] , "\t\t\t\t",list[a]['Arrival_time '] , "\t\t\t\t", waiting_time[a], "\t\t\t\t", Turnaround_time[a]
+    waiting_time[0] = 0
+    Turnaround_time[0] = fcfs[0]['Burst_time ']
+    for loop2 in range(size):
+        if loop2 != 0:
+            waiting_time[loop2] = waiting_time[loop2 - 1] + fcfs[loop2 - 1]['Burst_time '] - fcfs[loop2][
+                'Arrival_time ']
+            Turnaround_time[loop2] = waiting_time[loop2] + fcfs[loop2]['Burst_time '] - fcfs[loop2]['Arrival_time ']
+        print fcfs[loop2]['Process '], "\t\t\t\t", fcfs[loop2]['Burst_time '], "\t\t\t\t", fcfs[loop2][
+            'Arrival_time '], "\t\t\t\t", waiting_time[loop2], "\t\t\t\t", Turnaround_time[loop2]
 
-    for a in range(size):
-        total_turnaround_time = Turnaround_time[a] + total_turnaround_time                            #  total turnaround_time
-        total_waiting_time = waiting_time[a] + total_waiting_time                                     # total witing_time
+    for loop3 in range(size):
+        total_turnaround_time += Turnaround_time[loop3]                                 # total turnaround_time
+        total_waiting_time += waiting_time[loop3]                                       # total witing_time
 
-    average_turnaround_time = total_turnaround_time / size                                        # average turnaround_time
-    average_waiting_time = total_waiting_time / size                                              # average waiting_time
+    average_turnaround_time = total_turnaround_time / size                                # average turnaround_time
+    average_waiting_time = total_waiting_time / size                                      # average waiting_time
 
     print "Average Waiting_time = ", average_waiting_time
     print "Average Turnaroud_time = ", average_turnaround_time
